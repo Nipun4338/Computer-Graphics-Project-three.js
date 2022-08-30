@@ -1,6 +1,4 @@
 var scene, camera, renderer, meshFloor;
-var table_slab, table_leg_1, table_leg_2;
-var chair_slab, chair_leg_1, chair_leg_2, chair_leg_3, chair_leg_4, chair_back;
 
 var ambientLight, light;
 
@@ -44,18 +42,29 @@ function init() {
     camera = new THREE.PerspectiveCamera(90, sizes.width / sizes.height, 0.1, 1000);
 
     //texture loader
-    var texture_1 = new THREE.TextureLoader().load("textures/texture_1.jpg");
-    var texture_2 = new THREE.TextureLoader().load("textures/texture_2.jpg");
-    var texture_3 = new THREE.TextureLoader().load("textures/texture_3.jpg");
-    var texture_4 = new THREE.TextureLoader().load("textures/texture_4.jpg");
     var texture_5 = new THREE.TextureLoader().load("textures/Wood085A_1K-JPG/Wood085A_1K_Color.jpg");
     var keyboard_tex = new THREE.TextureLoader().load("textures/Keyboard.png");
+    var black = new THREE.TextureLoader().load("textures/black.jpg");
     var black = new THREE.TextureLoader().load("textures/black.jpg");
 
     texture_5.wrapS = THREE.RepeatWrapping;
     texture_5.wrapT = THREE.RepeatWrapping;
     texture_5.repeat.set(5, 5);
     //texture loader
+
+    // Create video and play
+    let textureVid = document.createElement("video")
+    textureVid.src = 'textures/f.mp4'; // transform gif to mp4
+    textureVid.loop = true;
+    textureVid.play();
+
+
+    // Load video texture
+    let videoTexture = new THREE.VideoTexture(textureVid);
+    videoTexture.format = THREE.RGBFormat;
+    videoTexture.minFilter = THREE.NearestFilter;
+    videoTexture.maxFilter = THREE.NearestFilter;
+    videoTexture.generateMipmaps = false;
 
     //keyboard
     keyboard = new THREE.Mesh(
@@ -167,7 +176,7 @@ function init() {
     scene.add(ambientLight);
 
     //pointLight
-    light = new THREE.PointLight(0xffffff, 1, 40);
+    light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(-3, 6, -3);
     light.castShadow = true;
     light.shadow.camera.near = .5;
@@ -185,13 +194,34 @@ function init() {
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.BasicShadowMap;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setClearColor(0x000000);
     document.body.appendChild(renderer.domElement);
+    renderer.physicallyCorrectLights = false;
     //renderer
+
+
+    resizeRendererToDisplaySize(renderer);
+
+    {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
 
     animate(); //call functionForAnimation
 }
+
+function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
 
 //functionForAnimation
 function animate() {
@@ -266,13 +296,41 @@ function onClick(event) {
     var texture_3 = new THREE.TextureLoader().load("textures/texture_3.jpg");
     var texture_4 = new THREE.TextureLoader().load("textures/texture_4.jpg");
 
+    // Create video and play
+    let textureVid = document.createElement("video")
+    textureVid.src = 'textures/f.mp4'; // transform gif to mp4
+    textureVid.loop = true;
+    textureVid.play();
+
+
+    // Load video texture
+    let videoTexture = new THREE.VideoTexture(textureVid);
+    videoTexture.format = THREE.RGBFormat;
+    videoTexture.minFilter = THREE.NearestFilter;
+    videoTexture.maxFilter = THREE.NearestFilter;
+    videoTexture.generateMipmaps = false;
+
+    let textureVid2 = document.createElement("video")
+    textureVid2.src = 'textures/windows.mp4'; // transform gif to mp4
+    textureVid2.loop = true;
+    textureVid2.play();
+
+
+    // Load video texture
+    let videoTexture2 = new THREE.VideoTexture(textureVid2);
+    videoTexture2.format = THREE.RGBFormat;
+    videoTexture2.minFilter = THREE.NearestFilter;
+    videoTexture2.maxFilter = THREE.NearestFilter;
+    videoTexture2.generateMipmaps = false;
+
+
     switch (click) {
         case 1:
             monitor_screen = new THREE.Mesh(
                 new THREE.BoxGeometry(1.95, .76, 0.001),
                 new THREE.MeshPhongMaterial({
                     color: 0xffffff,
-                    map: texture_1
+                    map: videoTexture
                 })
             );
             break;
@@ -290,7 +348,7 @@ function onClick(event) {
                 new THREE.BoxGeometry(1.95, .76, 0.001),
                 new THREE.MeshPhongMaterial({
                     color: 0xffffff,
-                    map: texture_3
+                    map: videoTexture
                 })
             );
             break;
@@ -299,7 +357,7 @@ function onClick(event) {
                 new THREE.BoxGeometry(1.95, .76, 0.001),
                 new THREE.MeshPhongMaterial({
                     color: 0xffffff,
-                    map: texture_4
+                    map: videoTexture2
                 })
             );
             break;
