@@ -6,66 +6,76 @@ var keyboard = {};
 var degree = 0;
 var click = 1;
 
+
 var socket = {     //camera lookAt height and movement speed
     height: 0.7,
     speed: 0.01
 }
 
+
 const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
+  width: window.innerWidth,
+  height: window.innerHeight,
+};
 
 //responsive canvas
-const canv = document.querySelector('#parent');
+const canv = document.querySelector("#parent");
 
-window.addEventListener('resize', () => {
-    sizes.width = window.innerWidth;
-    sizes.height = window.innerHeight;
+window.addEventListener("resize", () => {
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
 
-    camera.aspect = sizes.width / sizes.height;
-    camera.updateProjectionMatrix();
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
 
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    
-    renderer.render(scene, camera); // -> Also needed
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  renderer.render(scene, camera); // -> Also needed
 });
 
-
-
-
-//init function 
+//init function
 function init() {
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(
+    90,
+    sizes.width / sizes.height,
+    0.1,
+    1000
+  );
 
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(90, sizes.width / sizes.height, 0.1, 1000);
+  //texture loader
+  var texture_5 = new THREE.TextureLoader().load(
+    "textures/Wood085A_1K-JPG/Wood085A_1K_Color.jpg"
+  );
+  var keyboard_tex = new THREE.TextureLoader().load("textures/Keyboard.png");
+  var black = new THREE.TextureLoader().load("textures/black.jpg");
+  var black = new THREE.TextureLoader().load("textures/black.jpg");
+  var cpu_side_tex = new THREE.TextureLoader().load("textures/pc_inside.jpg");
+  var cpu_front_tex = new THREE.TextureLoader().load("textures/pcfront.jpg");
 
-    //texture loader
-    var texture_5 = new THREE.TextureLoader().load("textures/Wood085A_1K-JPG/Wood085A_1K_Color.jpg");
-    var keyboard_tex = new THREE.TextureLoader().load("textures/Keyboard.png");
-    var black = new THREE.TextureLoader().load("textures/black.jpg");
-    var sc = new THREE.TextureLoader().load("textures/sc.jpg");
+  texture_5.wrapS = THREE.RepeatWrapping;
+  texture_5.wrapT = THREE.RepeatWrapping;
+  texture_5.repeat.set(5, 5);
+  //texture loader
 
-    texture_5.wrapS = THREE.RepeatWrapping;
-    texture_5.wrapT = THREE.RepeatWrapping;
-    texture_5.repeat.set(5, 5);
-    //texture loader
 
-    //keyboard
+//keyboard
     keyboard = new THREE.Mesh(
         new THREE.BoxGeometry(1.2, 0.2, 0.1),
         new THREE.MeshBasicMaterial({
             color: 0xffffff,
             map: keyboard_tex
         })
-    );
-    scene.add(keyboard);
-    keyboard.position.set(0, 0, -0.45);
-    keyboard.rotation.x -= Math.PI / 2;
-    //keyboard
+  );
+  scene.add(keyboard);
+  keyboard.position.set(0, 0, -0.45);
+  keyboard.rotation.x -= Math.PI / 2;
+  keyboard.receiveShadow = true;
+  keyboard.castShadow = true;
+  //keyboard
 
-    //monitor_panel
+  //monitor_panel
     monitor_panel = new THREE.Mesh(
         new THREE.BoxGeometry(0.8, 0.2, 0.1),
         new THREE.MeshPhongMaterial({
@@ -150,64 +160,104 @@ function init() {
     meshFloor.rotation.x -= Math.PI / 2;
     meshFloor.receiveShadow = true;
     scene.add(meshFloor);
-    //meshFloor
+   //meshFloor
+    
+    
+  //CPU
+  cpu_front = new THREE.Mesh(
+    new THREE.BoxGeometry(0.6, 1, 0.01), //w,h,d
+    new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      map: cpu_front_tex,
+    })
+  );
+  scene.add(cpu_front);
+  cpu_front.position.set(-1.9, 0.5, 0);
+  //monitor.rotation.y += Math.PI / 30;
 
-    //light
-    //AmbientLight
-    ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-    scene.add(ambientLight);
+  //sideface
+  cpu_side = new THREE.Mesh(
+    new THREE.BoxGeometry(0.6, 2, 0.5), //w,h,d
+    new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      map: black,
+    })
+  );
+  scene.add(cpu_side);
 
-    //pointLight
-    light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(-3, 6, -3);
-    light.castShadow = true;
-    light.shadow.camera.near = .5;
-    light.shadow.camera.far = 15;
-    scene.add(light);
-    //light
+  cpu_side.position.set(-1.9, 0.0, 0.25);
+  //monitor.rotation.y += Math.PI / 27;
 
-    //camera
-    camera.position.set(0, socket.height, -1.5);
-    camera.lookAt(new THREE.Vector3(0, socket.height, 0));
-    //camera
+  //cpu_sideGlass
+  cpu_sideGlass = new THREE.Mesh(
+    new THREE.BoxGeometry(0.3, 0.95, 0.47), //w,h,d
+    new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      map: cpu_side_tex,
+    })
+  );
+  scene.add(cpu_sideGlass);
+  cpu_sideGlass.position.set(-1.749, 0.5, 0.25);
+  //cpu_sideGlass.rotation.y += Math.PI / 50;
+  cpu_sideGlass.receiveShadow = true;
+  cpu_sideGlass.castShadow = true;
 
-    //renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.setClearColor(0x000000);
-    document.body.appendChild(renderer.domElement);
-    renderer.physicallyCorrectLights = false;
-    //renderer
+  //CPU
 
+  //light
+  //AmbientLight
+  ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  scene.add(ambientLight);
 
-    resizeRendererToDisplaySize(renderer);
+  //pointLight
+  light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(-3, 6, -3);
+  light.castShadow = true;
+  light.shadow.camera.near = .5;
+  light.shadow.camera.far = 15;
+  scene.add(light);
+  //light
 
-    {
-      const canvas = renderer.domElement;
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
-      camera.updateProjectionMatrix();
-    }
+  //camera
+  camera.position.set(0, socket.height, -1.5);
+  camera.lookAt(new THREE.Vector3(0, socket.height, 0));
+  //camera
 
-    animate(); //call functionForAnimation
+  //renderer
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.setClearColor(0x000000);
+  document.body.appendChild(renderer.domElement);
+  renderer.physicallyCorrectLights = false;
+  //renderer
+
+  resizeRendererToDisplaySize(renderer);
+
+  {
+    const canvas = renderer.domElement;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+
+  animate(); //call functionForAnimation
 }
 
 function resizeRendererToDisplaySize(renderer) {
-    const canvas = renderer.domElement;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    const needResize = canvas.width !== width || canvas.height !== height;
-    if (needResize) {
-      renderer.setSize(width, height, false);
-    }
-    return needResize;
+  const canvas = renderer.domElement;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const needResize = canvas.width !== width || canvas.height !== height;
+  if (needResize) {
+    renderer.setSize(width, height, false);
   }
+  return needResize;
+}
 
 //functionForAnimation
 function animate() {
-
     requestAnimationFrame(animate);
 
     //Up(w)
@@ -255,13 +305,12 @@ function animate() {
 }
 //functionForAnimation
 
-
 function keyDown(event) {
-    keyboard[event.keyCode] = true;
+  keyboard[event.keyCode] = true;
 }
 
 function keyUp(event) {
-    keyboard[event.keyCode] = false;
+  keyboard[event.keyCode] = false;
 }
 
 //function for table texture change on mouse click
