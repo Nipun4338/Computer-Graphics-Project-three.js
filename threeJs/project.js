@@ -165,19 +165,19 @@ function init() {
     
   //CPU
   cpu_front = new THREE.Mesh(
-    new THREE.BoxGeometry(0.6, 1, 0.01), //w,h,d
+    new THREE.BoxGeometry(0.6, 1.5, 0.01), //w,h,d
     new THREE.MeshPhongMaterial({
       color: 0xffffff,
       map: cpu_front_tex,
     })
   );
   scene.add(cpu_front);
-  cpu_front.position.set(-1.9, 0.5, 0);
+  cpu_front.position.set(-1.9, 0.75, 0);
   //monitor.rotation.y += Math.PI / 30;
 
   //sideface
   cpu_side = new THREE.Mesh(
-    new THREE.BoxGeometry(0.6, 2, 0.5), //w,h,d
+    new THREE.BoxGeometry(0.6, 3, 0.5), //w,h,d
     new THREE.MeshPhongMaterial({
       color: 0xffffff,
       map: black,
@@ -190,14 +190,14 @@ function init() {
 
   //cpu_sideGlass
   cpu_sideGlass = new THREE.Mesh(
-    new THREE.BoxGeometry(0.3, 0.95, 0.47), //w,h,d
+    new THREE.BoxGeometry(0.3, 1.4, 0.47), //w,h,d
     new THREE.MeshPhongMaterial({
       color: 0xffffff,
       map: cpu_side_tex,
     })
   );
   scene.add(cpu_sideGlass);
-  cpu_sideGlass.position.set(-1.749, 0.5, 0.25);
+  cpu_sideGlass.position.set(-1.749, 0.75, 0.25);
   //cpu_sideGlass.rotation.y += Math.PI / 50;
   cpu_sideGlass.receiveShadow = true;
   cpu_sideGlass.castShadow = true;
@@ -411,7 +411,7 @@ function onClick(event) {
     switch (click) {
         case 1:
             monitor_screen = new THREE.Mesh(
-                new THREE.BoxGeometry(2.142, .855, 0.002),
+                new THREE.BoxGeometry(2.142, .855, 0.001),
                 new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     map: videoTexture
@@ -420,7 +420,7 @@ function onClick(event) {
             break;
         case 2:
             monitor_screen = new THREE.Mesh(
-                new THREE.BoxGeometry(2.142, .855, 0.003),
+                new THREE.BoxGeometry(2.142, .855, 0.001),
                 new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     map: cat
@@ -429,7 +429,7 @@ function onClick(event) {
             break;
         case 3:
             monitor_screen = new THREE.Mesh(
-                new THREE.BoxGeometry(2.142, .855, 0.004),
+                new THREE.BoxGeometry(2.142, .855, 0.001),
                 new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     map: ovai_
@@ -438,7 +438,7 @@ function onClick(event) {
             break;
         case 4:
             monitor_screen = new THREE.Mesh(
-                new THREE.BoxGeometry(2.142, .855, 0.005),
+                new THREE.BoxGeometry(2.142, .855, 0.001),
                 new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     map: videoTexture2
@@ -447,7 +447,7 @@ function onClick(event) {
             break;
         case 5:
             monitor_screen = new THREE.Mesh(
-                new THREE.BoxGeometry(2.142, .855, 0.006),
+                new THREE.BoxGeometry(2.142, .855, 0.001),
                 new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     map: where_
@@ -456,7 +456,7 @@ function onClick(event) {
             break;
         case 6:
             monitor_screen = new THREE.Mesh(
-                new THREE.BoxGeometry(2.142, .855, 0.007),
+                new THREE.BoxGeometry(2.142, .855, 0.001),
                 new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     map: hide_
@@ -465,7 +465,7 @@ function onClick(event) {
             break;
         case 7:
         monitor_screen = new THREE.Mesh(
-            new THREE.BoxGeometry(2.142, .855, 0.008),
+            new THREE.BoxGeometry(2.142, .855, 0.001),
             new THREE.MeshBasicMaterial({
                 color: 0xffffff,
                 map: mind_
