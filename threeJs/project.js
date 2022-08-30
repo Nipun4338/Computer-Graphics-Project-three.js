@@ -50,7 +50,7 @@ function init() {
   );
   var keyboard_tex = new THREE.TextureLoader().load("textures/Keyboard.png");
   var black = new THREE.TextureLoader().load("textures/black.jpg");
-  var black = new THREE.TextureLoader().load("textures/black.jpg");
+  var sc = new THREE.TextureLoader().load("textures/sc.jpg");
   var cpu_side_tex = new THREE.TextureLoader().load("textures/pc_inside.jpg");
   var cpu_front_tex = new THREE.TextureLoader().load("textures/pcfront.jpg");
 
