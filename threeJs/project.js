@@ -71,8 +71,6 @@ function init() {
   scene.add(keyboard);
   keyboard.position.set(0, 0, -0.45);
   keyboard.rotation.x -= Math.PI / 2;
-  keyboard.receiveShadow = true;
-  keyboard.castShadow = true;
   //keyboard
 
   //monitor_panel
@@ -173,6 +171,8 @@ function init() {
   );
   scene.add(cpu_front);
   cpu_front.position.set(-1.9, 0.75, 0);
+  cpu_front.receiveShadow = true;
+    cpu_front.castShadow = true;
   //monitor.rotation.y += Math.PI / 30;
 
   //sideface
@@ -186,6 +186,8 @@ function init() {
   scene.add(cpu_side);
 
   cpu_side.position.set(-1.9, 0.0, 0.25);
+  cpu_side.receiveShadow = true;
+    cpu_side.castShadow = true;
   //monitor.rotation.y += Math.PI / 27;
 
   //cpu_sideGlass
@@ -210,11 +212,16 @@ function init() {
   scene.add(ambientLight);
 
   //pointLight
-  light = new THREE.DirectionalLight(0xffffff, 1);
+  light = new THREE.PointLight(0xffffff, 1, 100);
   light.position.set(-3, 6, -3);
   light.castShadow = true;
-  light.shadow.camera.near = .5;
-  light.shadow.camera.far = 15;
+  light.shadow.camera.near = 0.5; // default
+  light.shadow.camera.far = 10; // default
+  light.shadowMapWidth = 1024; // default is 512
+  light.shadowMapHeight = 1024; // default is 512
+  light.shadow.mapSize.width = 1024;
+  light.shadow.mapSize.height = 1024;
+
   scene.add(light);
   //light
 
@@ -232,6 +239,8 @@ function init() {
   renderer.setClearColor(0x000000);
   document.body.appendChild(renderer.domElement);
   renderer.physicallyCorrectLights = false;
+  
+  
   //renderer
 
   resizeRendererToDisplaySize(renderer);
@@ -258,7 +267,12 @@ function resizeRendererToDisplaySize(renderer) {
 
 //functionForAnimation
 function animate() {
-    requestAnimationFrame(animate);
+
+    setTimeout( function() {
+
+        requestAnimationFrame( animate );
+
+    }, 1000/100 );
 
     //Up(w)
     if (keyboard[87]) {
@@ -282,11 +296,11 @@ function animate() {
     }
 
     //Left turn(q)
-    if (keyboard[69]) {
+    if (keyboard[81]) {
         camera.rotation.y -= Math.PI * 0.01;
     }
     //Right turn(e)
-    if (keyboard[81]) {
+    if (keyboard[69]) {
         camera.rotation.y += Math.PI * 0.01;
     }
 
